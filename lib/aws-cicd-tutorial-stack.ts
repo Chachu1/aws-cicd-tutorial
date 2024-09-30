@@ -1,8 +1,8 @@
-import * as cdk from "aws-cdk-lib";
-import { Construct } from "constructs";
-import * as lambda from "aws-cdk-lib/aws-lambda";
-import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
-import * as dotenv from "dotenv";
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as dotenv from 'dotenv';
 
 export class AwsCicdTutorialStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -20,18 +20,19 @@ export class AwsCicdTutorialStack extends cdk.Stack {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
     });
 
-    const lambdaFunction = new lambda.Function(this, "LambdaFunction", {
-      runtime: lambda.Runtime.PYTHON_3_9,
-      code: lambda.Code.fromAsset("lambda"),
-      handler: "main.handler",
+    // Create a Lambda function using a Docker image
+    const lambdaFunction = new lambda.DockerImageFunction(this, "LambdaFunction", {
+      code: lambda.DockerImageCode.fromImageAsset("lambda-docker"), // Path to the Dockerfile
       environment: {
         VERSION: process.env.VERSION || "0.0",
         TABLE_NAME: table.tableName,
       },
     });
 
+    // Grant the Lambda function read/write access to the DynamoDB table
     table.grantReadWriteData(lambdaFunction);
 
+    // Add a function URL for the Lambda function
     const functionUrl = lambdaFunction.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,
       cors: {
@@ -41,6 +42,7 @@ export class AwsCicdTutorialStack extends cdk.Stack {
       },
     });
 
+    // Output the function URL after deployment
     new cdk.CfnOutput(this, "Url", {
       value: functionUrl.url,
     });
