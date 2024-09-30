@@ -3,6 +3,8 @@ import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as dotenv from 'dotenv';
+import * as events from 'aws-cdk-lib/aws-events';
+import * as targets from 'aws-cdk-lib/aws-events-targets';
 
 export class AwsCicdTutorialStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -28,6 +30,14 @@ export class AwsCicdTutorialStack extends cdk.Stack {
         TABLE_NAME: table.tableName,
       },
     });
+
+    // Create EventBridge rule for daily schedule (runs at 00:00 UTC)
+    const dailyRule = new events.Rule(this, 'DailyScheduleRule', {
+      schedule: events.Schedule.cron({ minute: '0', hour: '0' }), // Runs daily at 00:00 UTC
+    });
+
+    // Set the Lambda function as the target for the EventBridge rule
+    dailyRule.addTarget(new targets.LambdaFunction(lambdaFunction));
 
     // Second Lambda Function (Newly added)
     const secondLambdaFunction = new lambda.DockerImageFunction(this, "SecondLambdaFunction", {
@@ -58,7 +68,7 @@ export class AwsCicdTutorialStack extends cdk.Stack {
         allowedMethods: [lambda.HttpMethod.ALL],
         allowedHeaders: ["*"],
       },
-    });    
+    });
 
     // Output the function URL after deployment
     new cdk.CfnOutput(this, "Url", {
