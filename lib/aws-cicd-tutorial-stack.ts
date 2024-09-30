@@ -66,7 +66,7 @@ export class AwsCicdTutorialStack extends cdk.Stack {
     });
 
     // Output the function URL after deployment
-    new cdk.CfnOutput(this, "Url", {
+    new cdk.CfnOutput(this, "Url2", {
       value: functionUrl2.url,
     });
 
