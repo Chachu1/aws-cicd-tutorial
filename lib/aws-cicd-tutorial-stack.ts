@@ -50,9 +50,25 @@ export class AwsCicdTutorialStack extends cdk.Stack {
       },
     });
 
+    // Add a function URL for the Lambda function
+    const functionUrl2 = secondLambdaFunction.addFunctionUrl({
+      authType: lambda.FunctionUrlAuthType.NONE,
+      cors: {
+        allowedOrigins: ["*"],
+        allowedMethods: [lambda.HttpMethod.ALL],
+        allowedHeaders: ["*"],
+      },
+    });    
+
     // Output the function URL after deployment
     new cdk.CfnOutput(this, "Url", {
       value: functionUrl.url,
     });
+
+    // Output the function URL after deployment
+    new cdk.CfnOutput(this, "Url", {
+      value: functionUrl2.url,
+    });
+
   }
 }
