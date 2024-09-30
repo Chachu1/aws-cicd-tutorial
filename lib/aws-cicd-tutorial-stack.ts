@@ -31,13 +31,13 @@ export class AwsCicdTutorialStack extends cdk.Stack {
       },
     });
 
-    // Create EventBridge rule for daily schedule (runs at 00:00 UTC)
-    const dailyRule = new events.Rule(this, 'DailyScheduleRule', {
-      schedule: events.Schedule.cron({ minute: '0', hour: '0' }), // Runs daily at 00:00 UTC
-    });
+    // // Create EventBridge rule for daily schedule (runs at 00:00 UTC)
+    // const dailyRule = new events.Rule(this, 'DailyScheduleRule', {
+    //   schedule: events.Schedule.cron({ minute: '0', hour: '0' }), // Runs daily at 00:00 UTC
+    // });
 
-    // Set the Lambda function as the target for the EventBridge rule
-    dailyRule.addTarget(new targets.LambdaFunction(lambdaFunction));
+    // // Set the Lambda function as the target for the EventBridge rule
+    // dailyRule.addTarget(new targets.LambdaFunction(lambdaFunction));
 
     // Second Lambda Function (Newly added)
     const secondLambdaFunction = new lambda.DockerImageFunction(this, "SecondLambdaFunction", {
