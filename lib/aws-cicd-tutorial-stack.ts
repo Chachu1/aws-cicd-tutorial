@@ -29,6 +29,14 @@ export class AwsCicdTutorialStack extends cdk.Stack {
       },
     });
 
+    // Second Lambda Function (Newly added)
+    const secondLambdaFunction = new lambda.DockerImageFunction(this, "SecondLambdaFunction", {
+      code: lambda.DockerImageCode.fromImageAsset("lambda-docker2"),  // Path to second Dockerfile
+      environment: {
+        VERSION: process.env.VERSION || "0.0",
+      },
+    });
+
     // Grant the Lambda function read/write access to the DynamoDB table
     table.grantReadWriteData(lambdaFunction);
 
