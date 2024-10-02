@@ -32,7 +32,7 @@ export class AwsCicdTutorialStack extends cdk.Stack {
     });
 
 
-    const seleniumlambdaFunction = new lambda.DockerImageFunction(this, "LambdaFunction", {
+    const seleniumlambdaFunction = new lambda.DockerImageFunction(this, "seleniumLambdaFunction", {
       code: lambda.DockerImageCode.fromImageAsset("selenium-docker"), // Path to the Dockerfile
       environment: {
         VERSION: process.env.VERSION || "0.0",
