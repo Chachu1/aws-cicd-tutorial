@@ -34,6 +34,8 @@ export class AwsCicdTutorialStack extends cdk.Stack {
 
     const seleniumlambdaFunction = new lambda.DockerImageFunction(this, "seleniumLambdaFunction", {
       code: lambda.DockerImageCode.fromImageAsset("selenium-docker"), // Path to the Dockerfile
+      memorySize: 1024,  // Increase memory to 1 GB (can be set up to 10,240 MB)
+      timeout: cdk.Duration.seconds(300),  // Increase timeout to 5 minutes (300 seconds)  Duration.minutes(5)
       environment: {
         VERSION: process.env.VERSION || "0.0",
         TABLE_NAME: table.tableName,
