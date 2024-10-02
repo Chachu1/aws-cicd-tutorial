@@ -1,4 +1,4 @@
-
+#!/bin/bash
 set -e
 
 latest_stable_json="https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json"
