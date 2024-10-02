@@ -31,6 +31,14 @@ export class AwsCicdTutorialStack extends cdk.Stack {
       },
     });
 
+
+    const lambdaFunction = new lambda.DockerImageFunction(this, "LambdaFunction", {
+      code: lambda.DockerImageCode.fromImageAsset("selenium-docker"), // Path to the Dockerfile
+      environment: {
+        VERSION: process.env.VERSION || "0.0",
+        TABLE_NAME: table.tableName,
+      },
+    });
     // // Create EventBridge rule for daily schedule (runs at 00:00 UTC)
     // const dailyRule = new events.Rule(this, 'DailyScheduleRule', {
     //   schedule: events.Schedule.cron({ minute: '0', hour: '0' }), // Runs daily at 00:00 UTC
